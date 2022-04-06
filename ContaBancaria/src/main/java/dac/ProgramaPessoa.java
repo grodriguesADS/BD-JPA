@@ -6,7 +6,7 @@ public class ProgramaPessoa {
 	public ProgramaPessoa() {
 		Scanner leitor = new Scanner(System.in);
 		
-		Funcoes f = new Funcoes();
+		FuncaoPessoa f = new FuncaoPessoa();
 		String sair = "n";
 		
 		while(!sair.equals("s")) {

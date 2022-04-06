@@ -2,11 +2,15 @@ package entidades;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 
@@ -23,21 +27,15 @@ public class ContaBancaria implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int id;
-	@Column()
-	private int CPF;
+		
 	private float saldo;
 	private String agencia;
 	private String numero; 
+	@OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+	@JoinColumn(name = "TITULAR_FK", nullable = false)
 	private Pessoa titular;
 	
 	
-	public int getCPF() {
-		return CPF;
-	}
-	
-	public void setCPF(int cpf) {
-		this.CPF = cpf;
-	}
 	
 	public int getId() {
 		return id;
