@@ -23,7 +23,7 @@ public class ContaDao extends DAO {
 			if (transaction.isActive()) {
 				transaction.rollback();
 			}
-			throw new PersistenciaDacException("Ocorreu algum erro ao tentar salvar o usuário.", pe);
+			throw new PersistenciaDacException("Ocorreu algum erro ao tentar salvar a conta.", pe);
 		} finally {
 			em.close();
 		}
@@ -34,7 +34,7 @@ public class ContaDao extends DAO {
 		ContaBancaria resultado = null;
 		try {
 			resultado = em.find(ContaBancaria.class, contaID);
-			System.out.println("o nome é " + resultado.getNumero());
+			
 		} catch (PersistenceException pe) {
 			pe.printStackTrace();
 			throw new PersistenciaDacException("Ocorreu algum erro ao tentar recuperar o usuário com base no ID.", pe);

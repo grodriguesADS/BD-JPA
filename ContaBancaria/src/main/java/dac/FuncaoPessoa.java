@@ -3,11 +3,13 @@ package dac;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.persistence.EntityManager;
+
 import dao.PersistenciaDacException;
 import dao.PessoaDao;
 import entidades.Pessoa;
 
-public class Funcoes {
+public class FuncaoPessoa {
 	  
 	private Scanner leitor = new Scanner(System.in);
 	private PessoaDao dao = new PessoaDao();
@@ -20,6 +22,7 @@ public class Funcoes {
 		}
 		return true;
 	}
+	
 	public void GetAll()  throws DacException {
 		
 		try {			

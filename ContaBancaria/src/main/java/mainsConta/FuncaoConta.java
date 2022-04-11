@@ -3,6 +3,8 @@ package mainsConta;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.persistence.EntityManager;
+
 import dac.DacException;
 
 import dao.ContaDao;
@@ -13,81 +15,94 @@ import entidades.Pessoa;
 public class FuncaoConta {
 	
 	private Scanner leitor = new Scanner(System.in);
-	private ContaDao dao = new ContaDao();
-	
+	private ContaDao dao;
+
 	
 	private boolean ExisteDado() throws DacException {
+		dao = new ContaDao();
 		List<ContaBancaria> conta = dao.getAll();
 		if(conta.size() == 0) {
 			return false;
 		}
 		return true;
 	}
+	
 	public void GetAll()  throws DacException {
-		
+		dao = new ContaDao();
 		try {			
 			List<ContaBancaria> conta = dao.getAll();
 			if(conta.size() == 0) {
 				System.out.println("Sem cadastro");
 			}else {
 				for (ContaBancaria user : conta) {
-					System.out.println("id: " + user.getId() + " | " + "CPF: " + user.getCPF() + " | " + "numero: " + user.getNumero());
+					System.out.println("id: " + user.getId() + " | " + "CPF: " + user.getTitular().getCPF() + " | " + "numero: " + user.getNumero());
 				}				
 			}			
 
 		} finally {
-			
+			dao.close();
 		}
 	}
 	
 	public void Salvar() throws DacException {
-				
+		dao = new ContaDao();	
 		try {
 			ContaBancaria conta = new ContaBancaria();
-			System.out.println("CPF:");
-			conta.setCPF(Integer.parseInt(leitor.nextLine()));
-			
-			System.out.println("Numero da Conta:");
-			conta.setNumero(leitor.nextLine());
-			
-			System.out.println("Numero da Agencia:");
-			conta.setAgencia(leitor.nextLine());
-			
-
 			
 			PessoaDao user = new PessoaDao();
 			System.out.println("Qual o ID da Pessoa dona da Conta");
 			int id = Integer.parseInt(leitor.nextLine());
+			System.out.println(user.getByID(id).getNome());
+			
+		
 			Pessoa pessoa = user.getByID(id);
 			
-			conta.setTitular(pessoa);
+			if(pessoa== null) {
+				System.out.println("Pessoa n encontrada");
+				
+			}else{				
+				conta.setTitular(pessoa);
 
-			System.out.println(user);
+				System.out.println(user);
+				
+
+				System.out.println("Numero da Conta:");
+				conta.setNumero(leitor.nextLine());
+				
+				System.out.println("Numero da Agencia:");
+				conta.setAgencia(leitor.nextLine());			
+				
+				System.out.println("Saldo:");
+				conta.setSaldo(leitor.nextFloat());
+				
+				dao.save(conta);
+
+				System.out.println(user.getByID(id).getNome());
+			}
 			
-			dao.save(conta);
-
-			System.out.println(user);
+		
+			
 		} finally {
-			
+			dao.close();
 		}
 	}
 	
 	public void Deletar(int id) throws DacException {
-		
+		dao = new ContaDao();
 		try {
 			ContaBancaria conta =new ContaBancaria();
 			conta = dao.getByID(id);
 			dao.delete(conta);
 
 			System.out.println("Conta do Cliente: " + conta.getTitular().getNome() + " " 
-			+ "CPF: " + conta.getCPF() + " " + "Numero: " + conta.getNumero() + " " + "Deletada");
+			+ "CPF: " + conta.getTitular().getCPF() + " " + "Numero: " + conta.getNumero() + " " + "Deletada");
 		} finally {
-			
+			dao.close();
 		}
 		}
 	
 	public void DeletarTodos()throws DacException {
-		
+		dao = new ContaDao();
 		System.out.println("Para Confirmar a Exclução Dos Dados  Didite 'confirmar'");
 		
 		if(!leitor.nextLine().equals("contirmar")) {
@@ -100,11 +115,12 @@ public class FuncaoConta {
 				System.out.println("Dados Excluidos....");
 			}
 		} finally {
-			
+			dao.close();
 		}
 	}
 	
 	public void GetID () throws DacException {
+		dao = new ContaDao();
 		if(ExisteDado()== false) {
 			System.out.println("Sistemas Sem Dados");
 			
@@ -118,7 +134,7 @@ public class FuncaoConta {
 				System.out.println("Id da Conta: " + conta.getId() + " | " + "Nome do Cliente: " + conta.getTitular().getNome() 
 						+ " | " + "Numero: " + conta.getNumero());
 			} finally {
-				
+				dao.close();
 			}
 			
 		}
@@ -126,7 +142,7 @@ public class FuncaoConta {
 	}
 	
 	public void Up(int id) throws DacException{
-		
+		dao = new ContaDao();
 		try {	
 			
 			ContaBancaria conta = dao.getByID(id);
@@ -175,7 +191,7 @@ public class FuncaoConta {
 			System.out.println("ID: " + conta.getId() + " | " + "Numero da Conta: " 
 					+ conta.getNumero() + " | " + "Agencia: " + conta.getAgencia() + " | " + "Saldo da Conta: " + conta.getSaldo());
 		} finally {
-			
+			dao.close();
 		}
 		
 	}

@@ -7,7 +7,7 @@ public class Main {
 	public static void main(String[] args)  {
 		Scanner leitor = new Scanner(System.in);
 		
-		Funcoes f = new Funcoes();
+	
 		String sair = "n";
 		
 		while(!sair.equals("s")) {
@@ -26,8 +26,7 @@ public class Main {
 					ProgramaPessoa pessoa = new ProgramaPessoa();
 					break;
 					
-				case "s":
-					f.Fechar();
+				case "s":				
 					sair = "s";
 					System.out.println("Programa Encerrado");
 					break;
